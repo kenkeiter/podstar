@@ -1,0 +1,67 @@
+#!/usr/bin/env python3
+
+import argparse
+import time
+import re
+
+import dateparser
+
+import podstar
+
+
+parser = argparse.ArgumentParser(
+    description='Download episodes of a podcast for a specific date.')
+parser.add_argument('--url', type=str, required=True, 
+    help="the URL of the feed to parse")
+parser.add_argument('--date', type=str, required=True,
+    help="an arbitrarily-formatted date")
+
+
+def slurp(feed_url, date):
+    f = podstar.Feed(feed_url)
+    
+    # print some basic information about the feed
+    print('---')
+    print(f.title)
+    print(f.description)
+    print('---')
+
+    print("Looking for episodes on {date}...".format(
+        date=date.strftime("%a. %b %d, %Y")))
+
+    on_date = list(filter(lambda e: e.published_at.date() == date, f.episodes()))
+
+    # print a list of the episodes
+    for episode in on_date:
+        print("- {title} ({pub_date})".format(
+            title=episode.title,
+            pub_date=episode.published_at.strftime("%a %b %d, %Y")))
+        
+        duration = "unknown"
+        if episode.soft_duration is not None:
+            duration = time.strftime(
+                "%H:%M:%S", time.gmtime(episode.soft_duration))
+        
+        print("  [{duration}] {audio_url}".format(
+            duration=duration,
+            audio_url=episode.audio.url))
+
+    print('---')
+
+    for episode in on_date:
+        filename = re.sub(r'\W+', '-', episode.title) + \
+            episode.audio.filename_ext
+        
+        print("- Saving episode '{title}' to '{filename}'...".format(
+            title=episode.title,
+            filename=filename))
+
+        with open(filename, 'wb+') as fh:
+            episode.audio.save(fh)
+
+def main():
+    args = parser.parse_args()
+    slurp(args.url, dateparser.parse(args.date).date())
+
+if __name__ == '__main__':
+    main()

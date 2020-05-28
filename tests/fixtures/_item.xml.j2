@@ -1,0 +1,22 @@
+<item>
+  {% if title %}<title>{{ title }}</title>{% endif %}
+  {% if description %}
+  <description>
+    <![CDATA[{{ description }}]]>
+  </description>
+  {% endif %}
+  {% if guid %}
+  <guid isPermaLink="false">{{ guid }}</guid>
+  {% endif %}
+  {% if pubdate %}
+  <pubDate>{{ pubdate.strftime("%a, %d %b %Y %H:%M:%S %z") }}</pubDate>
+  {% endif %}
+  {% if itunes %}
+  <itunes:explicit>no</itunes:explicit>
+  <itunes:image href="https://dfkfj8j276wwv.cloudfront.net/images/1d/cd/40/f4/1dcd40f4-d8f4-4c34-b680-a8f331a9757f/18af5b20db89eed9676c372a3f56aed70894ee2413ad21bbfc83ffbbb6d4e797be09de26e9e13d62abd2bf954feafbfccde5aa99437ed9a253b6ee34efddd8e3.jpeg"/>
+  <itunes:duration>{{ itunes_duration|default("00:36:29") }}</itunes:duration>
+  {% endif %}
+  {% if enclosure_url %}
+  <enclosure url="http://example.com/example.mp3" />
+  {% endif %}
+</item>
