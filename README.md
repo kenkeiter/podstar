@@ -1,31 +1,47 @@
 # Pod⭐
 
-_Podstar_ is a Python library for working with podcasts. It optimizes for robustness, efficiency, and standards support while providing a clean and simple API.
+_Podstar_ is a Python library for working with podcasts. It optimizes for robustness, efficiency, and standards support while providing a clean and simple API. Podstar has some neat features:
 
-Written in a day and a half – so there may be bugs. But there are also tests.
++ robust parsing of RSS-based podcast feeds
++ transparent use of paginated feeds (via RSS pagination)
++ support for HTTP caching headers (`ETag` or `Last-Modified`), enabling long-running aggregator processes to request as little data as possible
++ easy access to audio information, including:
+  + duration (as determined by iTunes DTD metadata when available, or by streaming audio files to memory until necessary metadata is available)
+  + bitrate
+  + sample rate
 
 ## Getting Started
 
-Ensure that you've got Python `>= 3.3` installed, and a new Python virtual environment activated.
-
-To get started, clone the repository and `cd` to it:
+Ensure that you've got Python `>= 3.3` installed, and a new Python virtual environment activated. Install the library using:
 
 ```sh
-$ git clone <repo url>
-$ cd podstar/
+$ pip install podstar
 ```
 
-Then, install the package by running:
+You're done!
 
-```sh
-$ pip install .
+## Using Podstar
+
+The following code iterates over a podcast feed, listing each episode and its duration:
+
+```python
+import time
+import podstar
+
+feed = podstar.Feed('http://feeds.sceneonradio.org/SceneOnRadio')
+
+# print some information about the podcast, including a text description (HTML in the description will be removed automatically)
+print(feed.title)
+print(feed.description + "\n")
+
+# list each episode with its title, date published, and duration
+for episode in feed.episodes():
+    pub_date = episode.published_at.strftime("%a %b %d, %Y")
+    duration = time.strftime("%H:%M:%S", time.gmtime(episode.duration))
+    print(f"– \"{episode.title}\" ({pub_date}) [{duration}]")
 ```
 
-You should now be able to try fetching episodes of a podcast for a specific date:
-
-```sh
-podstar --url="https://rss.prod.firstlook.media/missingrichardsimmons/podcast.rss" --date="2017-02-22"
-```
+For further examples of how to use Podstar, see the `examples/` directory.
 
 ## Development
 

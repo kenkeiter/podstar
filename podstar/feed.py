@@ -1,4 +1,5 @@
 import requests
+from bs4 import BeautifulSoup
 
 from podstar import feed_page
 
@@ -96,8 +97,17 @@ class Feed(object):
         return self.get('title', '').strip()
 
     @property
-    def description(self):
+    def description_html(self):
         return self.get('description', '').strip()
+    
+    @property
+    def description(self):
+        """
+        Get the description of the feed with HTML removed.
+        """
+        body = self.get('description', '').strip()
+        tree = BeautifulSoup(body, 'lxml')
+        return tree.get_text()
 
     @property
     def link(self):

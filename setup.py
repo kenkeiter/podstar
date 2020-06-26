@@ -16,17 +16,22 @@ if sys.version_info <= (3, 3):
         "The current interpreter is at version " \
         "{ver.major}.{ver.minor}.{ver.micro}".format(ver=sys.version_info))
 
+with open('README.md', 'r') as fh:
+    readme = fh.read()
+
 setup(
     name = 'podstar',
     packages = ['podstar'],
-    version = '0.1.0',
+    version = '1.0.0',
     description = 'An RSS-compatible podcast feed client.',
+    long_description = readme,
+    long_description_content_type = 'text/markdown',
     author = 'Kenneth Keiter',
     author_email = 'ken@kenkeiter.com',
     url = 'https://github.com/kenkeiter/podstar',
-    download_url = 'https://github.com/kenkeiter/podstar/archive/0.1.0.tar.gz',
+    license = 'MIT',
     keywords = ['rss', 'podcast', 'feed'],
     classifiers = [],
-    scripts=['bin/podstar'],
+    python_requires='>=3.3',
     install_requires=parse_requirements('requirements.txt'),
 )
