@@ -21,7 +21,7 @@ pytest-mock==3.1.0
 python-dateutil==2.6.0
 python-slugify==4.0.0
 pytz==2017.2
-PyYAML==5.3.1
+PyYAML==5.4
 regex==2020.5.14
 requests==2.23.0
 requests-mock==1.8.0
